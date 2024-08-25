@@ -1,7 +1,5 @@
 <script>
   import TodoList from './components/TodoList.svelte';
-  import Navbar from "./lib/Navbar.svelte";
-  import Dropdown from './lib/dropdown.svelte';
 </script>
 
 <main>
