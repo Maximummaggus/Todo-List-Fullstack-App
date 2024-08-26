@@ -1,5 +1,5 @@
 <script>
-    import { writable } from 'svelte/store';
+    import {writable} from 'svelte/store';
     import TodoItem from './TodoItem.svelte';
 
     let todos = writable([]);
@@ -7,7 +7,7 @@
 
     function addTodo() {
         if (newTodo.trim()) {
-            todos.update(items => [...items, { text: newTodo, id: Date.now() }]);
+            todos.update(items => [...items, {text: newTodo, id: Date.now()}]);
             newTodo = '';
         }
     }
@@ -28,7 +28,7 @@
 
 <ul>
     {#each $todos as todo (todo.id)}
-        <TodoItem {todo} on:removeTodo={handleRemove} />
+        <TodoItem {todo} on:removeTodo={handleRemove}/>
     {/each}
 </ul>
 
@@ -53,4 +53,37 @@
         list-style: none;
         padding: 0;
     }
+
+    li {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Media Queries für handfreundliches Design */
+    @media (max-width: 400px) {
+        input {
+            padding: 6px;
+            font-size: 0.3rem;
+            margin-right: 5px;
+        }
+
+        button {
+            padding: 3px 6px;
+            font-size: 0.3rem;
+            margin-left: 3px;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        li {
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+    }
+
 </style>
