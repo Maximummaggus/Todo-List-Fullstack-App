@@ -56,10 +56,18 @@
 
 <RefreshButton on:refresh={refreshTodos}/>
 
-<ul>
-    {#each $todos as todo (todo.id)}
-        <li>
+<table>
+    <thead>
+        <tr>
+            <th>Task</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {#each $todos as todo (todo.id)}
+        <tr>
             {#if editMode && editedTodoId === todo.id}
+            <td colspan="2">
                 <input
                     bind:value={editedText}
                     on:keydown={(e) => e.key === 'Enter' && saveEdit()}
@@ -68,16 +76,18 @@
                     <button on:click={saveEdit}>Save</button>
                     <button on:click={cancelEdit}>Cancel</button>
                 </div>
+            </td>
             {:else}
-                <div class="todo-content">{todo.text}</div>
-                <div class="buttons">
-                    <button on:click={() => startEdit(todo.id, todo.text)}>Edit</button>
-                    <button on:click={() => removeTodo(todo.id)}>Remove</button>
-                </div>
+            <td class="todo-content">{todo.text}</td>
+            <td class="buttons">
+                <button on:click={() => startEdit(todo.id, todo.text)}>Edit</button>
+                <button on:click={() => removeTodo(todo.id)}>Remove</button>
+            </td>
             {/if}
-        </li>
-    {/each}
-</ul>
+        </tr>
+        {/each}
+    </tbody>
+</table>
 
 <style>
     input {
@@ -85,8 +95,7 @@
         margin-right: 8px;
         border-radius: 4px;
         border: 1px solid #ccc;
-        flex-grow: 1;
-        min-width: 150px;
+        width: calc(100% - 16px); /* Vollständige Breite für Eingabefeld */
     }
 
     button {
@@ -101,32 +110,28 @@
         font-size: 1rem;
     }
 
-    ul {
-        list-style: none;
-        padding: 0;
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
     }
 
-    li {
+    th, td {
         padding: 10px;
-        border-bottom: 1px solid #ddd;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
+        border: 1px solid #ddd;
+        text-align: left;
+        vertical-align: middle;
     }
 
-    li .todo-content {
-        flex: 1;
-        min-width: 0; /* Wichtig, damit flex-grow funktioniert */
-        margin-right: 10px;
+    td.todo-content {
         word-wrap: break-word;
         overflow-wrap: break-word;
+        max-width: 600px; /* Setze eine maximale Breite für den Textbereich */
     }
 
-    li .buttons {
-        display: flex;
-        gap: 10px;
-        white-space: nowrap; /* Verhindert Zeilenumbruch in Buttons */
+    td.buttons {
+        white-space: nowrap;
+        text-align: right;
     }
 
     @keyframes gradient-animation {
@@ -145,26 +150,25 @@
         input {
             padding: 6px;
             font-size: 0.9rem;
-            margin-right: 5px;
-            flex-basis: 100%;
+            width: calc(100% - 12px);
         }
 
         button {
             padding: 8px;
             font-size: 0.9rem;
-            margin-left: 0;
+            width: 100%;
             margin-top: 5px;
-            width: 100%;
         }
 
-        li {
+        td.todo-content {
+            max-width: 100%;
+        }
+
+        td.buttons {
+            display: flex;
             flex-direction: column;
-            align-items: flex-start;
-        }
-
-        li .buttons {
-            width: 100%;
-            justify-content: flex-end;
+            align-items: flex-end;
+            gap: 5px;
         }
     }
 </style>
