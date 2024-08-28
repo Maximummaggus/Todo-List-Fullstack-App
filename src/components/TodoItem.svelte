@@ -29,7 +29,7 @@
     function saveEdit() {
         todos.update(items => {
             return items.map(item =>
-                item.id === editedTodoId ? {...item, text: editedText} : item
+                item.id === editedTodoId ? { ...item, text: editedText } : item
             );
         });
         cancelEdit();
@@ -46,12 +46,11 @@
     }
 </script>
 
-<!-- Eingabefeld für neues Todo -->
 <input
-        type="text"
-        bind:value={newTodo}
-        placeholder="Enter a new task..."
-        on:keydown={(e) => e.key === 'Enter' && addTodo()}
+    type="text"
+    bind:value={newTodo}
+    placeholder="Enter a new task..."
+    on:keydown={(e) => e.key === 'Enter' && addTodo()}
 />
 <button on:click={addTodo}>Add Todo</button>
 
@@ -62,15 +61,19 @@
         <li>
             {#if editMode && editedTodoId === todo.id}
                 <input
-                        bind:value={editedText}
-                        on:keydown={(e) => e.key === 'Enter' && saveEdit()}
+                    bind:value={editedText}
+                    on:keydown={(e) => e.key === 'Enter' && saveEdit()}
                 />
-                <button on:click={saveEdit}>Save</button>
-                <button on:click={cancelEdit}>Cancel</button>
+                <div class="buttons">
+                    <button on:click={saveEdit}>Save</button>
+                    <button on:click={cancelEdit}>Cancel</button>
+                </div>
             {:else}
-                {todo.text}
-                <button on:click={() => startEdit(todo.id, todo.text)}>Edit</button>
-                <button on:click={() => removeTodo(todo.id)}>Remove</button>
+                <div class="todo-content">{todo.text}</div>
+                <div class="buttons">
+                    <button on:click={() => startEdit(todo.id, todo.text)}>Edit</button>
+                    <button on:click={() => removeTodo(todo.id)}>Remove</button>
+                </div>
             {/if}
         </li>
     {/each}
@@ -82,6 +85,8 @@
         margin-right: 8px;
         border-radius: 4px;
         border: 1px solid #ccc;
+        flex-grow: 1;
+        min-width: 150px;
     }
 
     button {
@@ -93,7 +98,6 @@
         cursor: pointer;
         color: white;
         animation: gradient-animation 10s ease infinite;
-        margin-left: 5px;
         font-size: 1rem;
     }
 
@@ -106,8 +110,23 @@
         padding: 10px;
         border-bottom: 1px solid #ddd;
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
         align-items: center;
+        justify-content: space-between;
+    }
+
+    li .todo-content {
+        flex: 1;
+        min-width: 0; /* Wichtig, damit flex-grow funktioniert */
+        margin-right: 10px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    li .buttons {
+        display: flex;
+        gap: 10px;
+        white-space: nowrap; /* Verhindert Zeilenumbruch in Buttons */
     }
 
     @keyframes gradient-animation {
@@ -122,23 +141,30 @@
         }
     }
 
-    /* Media Queries für handfreundliches Design */
     @media (max-width: 400px) {
         input {
             padding: 6px;
             font-size: 0.9rem;
             margin-right: 5px;
+            flex-basis: 100%;
         }
 
         button {
             padding: 8px;
             font-size: 0.9rem;
-            margin-left: 3px;
+            margin-left: 0;
+            margin-top: 5px;
+            width: 100%;
         }
 
         li {
-            padding: 8px;
-            font-size: 0.9rem;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        li .buttons {
+            width: 100%;
+            justify-content: flex-end;
         }
     }
 </style>

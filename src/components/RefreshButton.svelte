@@ -4,7 +4,6 @@
     const dispatch = createEventDispatcher();
 
     function handleClick() {
-        // Dispatch an event to inform the parent component to refresh the todo list
         dispatch('refresh');
     }
 </script>
@@ -23,7 +22,9 @@
         cursor: pointer;
         color: white;
         animation: gradient-animation 10s ease infinite;
-        margin-left: 5px;
+        margin-left: auto; /* Button wird nach rechts geschoben */
+        display: block;
+        width: 100%; /* Damit der Button auf kleinen Bildschirmen die volle Breite einnimmt */
     }
 
     @keyframes gradient-animation {
@@ -38,7 +39,6 @@
         }
     }
 
-    /* Media Queries für handfreundliches Design */
     @media (max-width: 400px) {
         button {
             padding: 8px;

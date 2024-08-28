@@ -1,5 +1,5 @@
 <script>
-    import {writable} from 'svelte/store';
+    import { writable } from 'svelte/store';
     import TodoItem from './TodoItem.svelte';
 
     let todos = writable([]);
@@ -7,7 +7,7 @@
 
     function addTodo() {
         if (newTodo.trim()) {
-            todos.update(items => [...items, {text: newTodo, id: Date.now()}]);
+            todos.update(items => [...items, { text: newTodo, id: Date.now() }]);
             newTodo = '';
         }
     }
@@ -19,10 +19,10 @@
 </script>
 
 <input
-        type="text"
-        bind:value={newTodo}
-        placeholder="Enter a new task..."
-        on:keydown={(e) => e.key === 'Enter' && addTodo()}
+    type="text"
+    bind:value={newTodo}
+    placeholder="Enter a new task..."
+    on:keydown={(e) => e.key === 'Enter' && addTodo()}
 />
 <button on:click={addTodo}>Add Todo</button>
 
@@ -38,6 +38,8 @@
         margin-right: 8px;
         border-radius: 4px;
         border: 1px solid #ccc;
+        flex-grow: 1;
+        min-width: 150px;
     }
 
     button {
@@ -47,6 +49,9 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        margin-left: auto; /* Buttons nach rechts schieben */
+        display: block;
+        width: 100%; /* Button nimmt volle Breite ein */
     }
 
     ul {
@@ -60,30 +65,28 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
     }
 
-    /* Media Queries für handfreundliches Design */
     @media (max-width: 400px) {
         input {
             padding: 6px;
-            font-size: 0.3rem;
+            font-size: 0.9rem;
             margin-right: 5px;
+            flex-basis: 100%; /* Eingabefeld breiter */
         }
 
         button {
-            padding: 3px 6px;
-            font-size: 0.3rem;
-            margin-left: 3px;
-        }
-
-        ul {
-            padding: 0;
+            padding: 8px;
+            font-size: 0.9rem;
+            margin-left: 0;
+            margin-top: 5px; /* Platz zwischen den Buttons */
+            width: 100%; /* Buttons nehmen volle Breite ein */
         }
 
         li {
-            padding: 8px;
-            font-size: 0.9rem;
+            flex-direction: column;
+            align-items: flex-start;
         }
     }
-
 </style>

@@ -26,7 +26,7 @@
     .container {
         display: flex;
         align-items: center;
-        gap: 21px;
+        gap: 20px;
     }
 
     @keyframes gradient-animation {
@@ -41,7 +41,6 @@
         }
     }
 
-    /* Media Queries für handfreundliches Design */
     @media (max-width: 400px) {
         .gradient-text {
             font-size: 2rem;

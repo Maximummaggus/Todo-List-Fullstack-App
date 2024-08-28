@@ -5,8 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  background-color: #333; /* Geänderter Hintergrund */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -67,65 +66,13 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+      color: #213547;
+      background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+      color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
-  }
-}
-
-main {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 1rem;
-  font-family: Arial, sans-serif;
-}
-
-/* Media Queries für verschiedene Bildschirmgrößen */
-@media (max-width: 600px) {
-  :root {
-    font-size: 15px;
-  }
-
-  main {
-    padding: 0.5rem;
-    max-width: 100%;
-  }
-
-  h1 {
-    font-size: 2.5em;
-  }
-
-  .card {
-    padding: 1.5em;
-  }
-}
-
-@media (max-width: 400px) {
-  :root {
-    font-size: 14px;
-  }
-
-  main {
-    padding: 0.5rem;
-    max-width: 100%;
-    box-shadow: none;
-  }
-
-  h1 {
-    font-size: 2em;
-  }
-
-  .card {
-    padding: 1em;
-  }
-
-  button {
-    padding: 0.5em 1em;
-    font-size: 0.9em;
+      background-color: #f9f9f9;
   }
 }
