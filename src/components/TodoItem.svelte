@@ -11,7 +11,7 @@
 
     function addTodo() {
         if (newTodo.trim()) {
-            todos.update(items => [...items, { text: newTodo, id: Date.now() }]);
+            todos.update(items => [...items, { text: newTodo, id: Date.now(), completed: false }]);
             newTodo = '';
         }
     }
@@ -44,6 +44,14 @@
     function refreshTodos() {
         console.log('Todos refreshed');
     }
+
+    function toggleComplete(id) {
+        todos.update(items =>
+            items.map(item =>
+                item.id === id ? { ...item, completed: !item.completed } : item
+            )
+        );
+    }
 </script>
 
 <input
@@ -56,46 +64,50 @@
 
 <RefreshButton on:refresh={refreshTodos}/>
 
-<table>
-    <thead>
-        <tr>
-            <th>Task</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {#each $todos as todo (todo.id)}
-        <tr>
-            {#if editMode && editedTodoId === todo.id}
-            <td colspan="2">
-                <input
-                    bind:value={editedText}
-                    on:keydown={(e) => e.key === 'Enter' && saveEdit()}
-                />
-                <div class="buttons">
-                    <button on:click={saveEdit}>Save</button>
-                    <button on:click={cancelEdit}>Cancel</button>
-                </div>
-            </td>
-            {:else}
-            <td class="todo-content">{todo.text}</td>
-            <td class="buttons">
-                <button on:click={() => startEdit(todo.id, todo.text)}>Edit</button>
-                <button on:click={() => removeTodo(todo.id)}>Remove</button>
-            </td>
-            {/if}
-        </tr>
-        {/each}
-    </tbody>
-</table>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Complete</th>
+                <th>Task</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {#each $todos as todo (todo.id)}
+            <tr class:completed={todo.completed}>
+                {#if editMode && editedTodoId === todo.id}
+                <td colspan="3">
+                    <input
+                        bind:value={editedText}
+                        on:keydown={(e) => e.key === 'Enter' && saveEdit()}
+                    />
+                    <div class="buttons">
+                        <button on:click={saveEdit}>Save</button>
+                        <button on:click={cancelEdit}>Cancel</button>
+                    </div>
+                </td>
+                {:else}
+                <td><input type="checkbox" checked={todo.completed} on:change={() => toggleComplete(todo.id)} /></td>
+                <td class="todo-content">{todo.text}</td>
+                <td class="buttons">
+                    <button on:click={() => startEdit(todo.id, todo.text)}>Edit</button>
+                    <button on:click={() => removeTodo(todo.id)}>Remove</button>
+                </td>
+                {/if}
+            </tr>
+            {/each}
+        </tbody>
+    </table>
+</div>
 
 <style>
-    input {
+    input[type="text"] {
         padding: 8px;
         margin-right: 8px;
         border-radius: 4px;
         border: 1px solid #ccc;
-        width: calc(100% - 16px); /* Vollständige Breite für Eingabefeld */
+        width: calc(100% - 16px); 
     }
 
     button {
@@ -110,10 +122,15 @@
         font-size: 1rem;
     }
 
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 20px;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
     }
 
     th, td {
@@ -126,12 +143,17 @@
     td.todo-content {
         word-wrap: break-word;
         overflow-wrap: break-word;
-        max-width: 600px; /* Setze eine maximale Breite für den Textbereich */
+        max-width: 600px; 
     }
 
     td.buttons {
         white-space: nowrap;
         text-align: right;
+    }
+
+    tr.completed td.todo-content {
+        text-decoration: line-through; 
+        color: #aaa;
     }
 
     @keyframes gradient-animation {
@@ -146,28 +168,31 @@
         }
     }
 
-    @media (max-width: 400px) {
-        input {
-            padding: 6px;
-            font-size: 0.9rem;
-            width: calc(100% - 12px);
+    @media (max-width: 600px) {
+        .table-container {
+            overflow-x: auto;
         }
 
-        button {
+        table {
+            table-layout: fixed;
+        }
+
+        th, td {
             padding: 8px;
             font-size: 0.9rem;
-            width: 100%;
-            margin-top: 5px;
         }
 
         td.todo-content {
-            max-width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: none;
         }
 
         td.buttons {
+            text-align: center;
+            padding: 8px 0;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
             gap: 5px;
         }
     }
