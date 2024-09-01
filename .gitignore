@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Ignoriere die SQLite-Datenbankdatei
+server/db/database.sqlite
