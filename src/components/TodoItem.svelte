@@ -1,5 +1,5 @@
 <script>
-    import { todos, addTodo, fetchTodos } from "../stores/todos.js";
+    import { todos, addTodo, fetchTodos, clearTodos } from "../stores/todos.js";
     import { writable } from "svelte/store";
     import RefreshButton from "./RefreshButton.svelte";
     import { onMount } from "svelte";
@@ -60,6 +60,7 @@
 
     function refreshTodos() {
         console.log("Todos refreshed");
+        clearTodos();
     }
 
     function toggleComplete(id) {

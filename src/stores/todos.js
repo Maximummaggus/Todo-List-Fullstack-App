@@ -80,6 +80,23 @@ export const deleteTodo = async (id) => {
     }
 };
 
+// Funktion zum Löschen aller Todos
+export const clearTodos = async () => {
+    try {
+        const response = await fetch('http://localhost:5000/api/todos', {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Fehler beim Löschen der Todos');
+        }
+
+        todos.set([]); // Leere den Store
+    } catch (error) {
+        console.error('Fehler:', error);
+    }
+};
+
 
 export const toggleCompleteTodo = async (id) => {
     try {

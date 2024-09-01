@@ -60,6 +60,28 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+// Alle Todos löschen
+router.delete('/', (req, res) => {
+    db.serialize(() => {
+        db.run('DELETE FROM todos', function (err) {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+
+            // Nachdem alle Todos gelöscht wurden, den ID-Zähler zurücksetzen
+            db.run('DELETE FROM sqlite_sequence WHERE name="todos"', function (err) {
+                if (err) {
+                    res.status(500).json({ error: err.message });
+                    return;
+                }
+
+                res.status(200).json({ message: 'Alle Todos wurden gelöscht und ID-Zähler zurückgesetzt' });
+            });
+        });
+    });
+});
+
 
 // PATCH Todo (Toggle Complete)
 router.patch('/:id', (req, res) => {
