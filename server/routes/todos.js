@@ -32,13 +32,19 @@ router.post('/', (req, res) => {
 // Ein Todo aktualisieren
 router.put('/:id', (req, res) => {
     const { id } = req.params;
-    const { text, completed } = req.body;
-    db.run('UPDATE todos SET text = ?, completed = ? WHERE id = ?', [text, completed, id], function (err) {
+    const { text } = req.body;
+    if (!text) {
+        return res.status(400).json({ error: 'Text is required' });
+    }
+    db.run('UPDATE todos SET text = ? WHERE id = ?', [text, id], function (err) {
         if (err) {
             res.status(400).json({ error: err.message });
             return;
         }
-        res.json({ id, text, completed });
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Todo not found' });
+        }
+        res.json({ id, text, completed: false }); // Aktualisiere je nach Bedarf
     });
 });
 
@@ -53,5 +59,31 @@ router.delete('/:id', (req, res) => {
         res.json({ deletedID: id });
     });
 });
+
+
+// PATCH Todo (Toggle Complete)
+router.patch('/:id', (req, res) => {
+    const { id } = req.params;
+    const { completed } = req.body;
+
+    db.run('UPDATE todos SET completed = ? WHERE id = ?', [completed, id], function (err) {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Todo not found' });
+        }
+        // Rückgabe des aktualisierten Todos
+        db.get('SELECT * FROM todos WHERE id = ?', id, (err, row) => {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+            res.json(row);
+        });
+    });
+});
+
 
 export default router;

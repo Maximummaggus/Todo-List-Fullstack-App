@@ -1,20 +1,23 @@
 <script>
-    import { writable } from 'svelte/store';
-    import TodoItem from './TodoItem.svelte';
+    import { writable } from "svelte/store";
+    import TodoItem from "./TodoItem.svelte";
 
     let todos = writable([]);
-    let newTodo = '';
+    let newTodo = "";
 
     function addTodo() {
         if (newTodo.trim()) {
-            todos.update(items => [...items, { text: newTodo, id: Date.now() }]);
-            newTodo = '';
+            todos.update((items) => [
+                ...items,
+                { text: newTodo, id: Date.now() },
+            ]);
+            newTodo = "";
         }
     }
 
     function handleRemove(event) {
         const id = event.detail;
-        todos.update(items => items.filter(item => item.id !== id));
+        todos.update((items) => items.filter((item) => item.id !== id));
     }
 </script>
 
@@ -22,13 +25,13 @@
     type="text"
     bind:value={newTodo}
     placeholder="Enter a new task..."
-    on:keydown={(e) => e.key === 'Enter' && addTodo()}
+    on:keydown={(e) => e.key === "Enter" && addTodo()}
 />
 <button on:click={addTodo}>Add Todo</button>
 
 <ul>
     {#each $todos as todo (todo.id)}
-        <TodoItem {todo} on:removeTodo={handleRemove}/>
+        <TodoItem {todo} on:removeTodo={handleRemove} />
     {/each}
 </ul>
 

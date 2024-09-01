@@ -1,23 +1,40 @@
 <script>
-    import { writable } from 'svelte/store';
-    import RefreshButton from './RefreshButton.svelte';
+    import { todos, addTodo, fetchTodos } from "../stores/todos.js";
+    import { writable } from "svelte/store";
+    import RefreshButton from "./RefreshButton.svelte";
+    import { onMount } from "svelte";
 
-    const todos = writable([]);
+    // const todos = writable([]);
 
-    let newTodo = '';
+    let newTodo = "";
     let editMode = false;
     let editedTodoId = null;
-    let editedText = '';
+    let editedText = "";
 
-    function addTodo() {
+    async function addNewTodo() {
+        console.log("Button clicked"); // Für Debugging
         if (newTodo.trim()) {
-            todos.update(items => [...items, { text: newTodo, id: Date.now(), completed: false }]);
-            newTodo = '';
+            await addTodo(newTodo);
+            newTodo = "";
         }
     }
 
+    onMount(() => {
+        fetchTodos(); // Todos laden, wenn die Komponente gemountet wird
+    });
+
+    // function addTodo() {
+    //     if (newTodo.trim()) {
+    //         todos.update((items) => [
+    //             ...items,
+    //             { text: newTodo, id: Date.now(), completed: false },
+    //         ]);
+    //         newTodo = "";
+    //     }
+    // }
+
     function removeTodo(id) {
-        todos.update(items => items.filter(item => item.id !== id));
+        todos.update((items) => items.filter((item) => item.id !== id));
     }
 
     function startEdit(id, text) {
@@ -27,9 +44,9 @@
     }
 
     function saveEdit() {
-        todos.update(items => {
-            return items.map(item =>
-                item.id === editedTodoId ? { ...item, text: editedText } : item
+        todos.update((items) => {
+            return items.map((item) =>
+                item.id === editedTodoId ? { ...item, text: editedText } : item,
             );
         });
         cancelEdit();
@@ -38,31 +55,41 @@
     function cancelEdit() {
         editMode = false;
         editedTodoId = null;
-        editedText = '';
+        editedText = "";
     }
 
     function refreshTodos() {
-        console.log('Todos refreshed');
+        console.log("Todos refreshed");
     }
 
     function toggleComplete(id) {
-        todos.update(items =>
-            items.map(item =>
-                item.id === id ? { ...item, completed: !item.completed } : item
-            )
+        todos.update((items) =>
+            items.map((item) =>
+                item.id === id ? { ...item, completed: !item.completed } : item,
+            ),
         );
     }
 </script>
 
-<input
+<!-- <input
     type="text"
     bind:value={newTodo}
     placeholder="Enter a new task..."
-    on:keydown={(e) => e.key === 'Enter' && addTodo()}
+    on:keydown={(e) => e.key === "Enter" && addNHewTodo()}
 />
-<button on:click={addTodo}>Add Todo</button>
+<button on:click={addTodo}>Add Todo</button> -->
 
-<RefreshButton on:refresh={refreshTodos}/>
+<div class="input-container">
+    <input
+        type="text"
+        bind:value={newTodo}
+        placeholder="Enter a new task..."
+        on:keydown={(e) => e.key === "Enter" && addNewTodo()}
+    />
+    <button on:click={addNewTodo}>Add Todo</button>
+</div>
+
+<RefreshButton on:refresh={refreshTodos} />
 
 <div class="table-container">
     <table>
@@ -75,27 +102,39 @@
         </thead>
         <tbody>
             {#each $todos as todo (todo.id)}
-            <tr class:completed={todo.completed}>
-                {#if editMode && editedTodoId === todo.id}
-                <td colspan="3">
-                    <input
-                        bind:value={editedText}
-                        on:keydown={(e) => e.key === 'Enter' && saveEdit()}
-                    />
-                    <div class="buttons">
-                        <button on:click={saveEdit}>Save</button>
-                        <button on:click={cancelEdit}>Cancel</button>
-                    </div>
-                </td>
-                {:else}
-                <td><input type="checkbox" checked={todo.completed} on:change={() => toggleComplete(todo.id)} /></td>
-                <td class="todo-content">{todo.text}</td>
-                <td class="buttons">
-                    <button on:click={() => startEdit(todo.id, todo.text)}>Edit</button>
-                    <button on:click={() => removeTodo(todo.id)}>Remove</button>
-                </td>
-                {/if}
-            </tr>
+                <tr class:completed={todo.completed}>
+                    {#if editMode && editedTodoId === todo.id}
+                        <td colspan="3">
+                            <input
+                                bind:value={editedText}
+                                on:keydown={(e) =>
+                                    e.key === "Enter" && saveEdit()}
+                            />
+                            <div class="buttons">
+                                <button on:click={saveEdit}>Save</button>
+                                <button on:click={cancelEdit}>Cancel</button>
+                            </div>
+                        </td>
+                    {:else}
+                        <td
+                            ><input
+                                type="checkbox"
+                                checked={todo.completed}
+                                on:change={() => toggleComplete(todo.id)}
+                            /></td
+                        >
+                        <td class="todo-content">{todo.text}</td>
+                        <td class="buttons">
+                            <button
+                                on:click={() => startEdit(todo.id, todo.text)}
+                                >Edit</button
+                            >
+                            <button on:click={() => removeTodo(todo.id)}
+                                >Remove</button
+                            >
+                        </td>
+                    {/if}
+                </tr>
             {/each}
         </tbody>
     </table>
@@ -107,7 +146,7 @@
         margin-right: 8px;
         border-radius: 4px;
         border: 1px solid #ccc;
-        width: calc(100% - 16px); 
+        width: calc(100% - 16px);
     }
 
     button {
@@ -133,7 +172,8 @@
         border-collapse: collapse;
     }
 
-    th, td {
+    th,
+    td {
         padding: 10px;
         border: 1px solid #ddd;
         text-align: left;
@@ -143,7 +183,7 @@
     td.todo-content {
         word-wrap: break-word;
         overflow-wrap: break-word;
-        max-width: 600px; 
+        max-width: 600px;
     }
 
     td.buttons {
@@ -152,7 +192,7 @@
     }
 
     tr.completed td.todo-content {
-        text-decoration: line-through; 
+        text-decoration: line-through;
         color: #aaa;
     }
 
@@ -177,7 +217,8 @@
             table-layout: fixed;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             font-size: 0.9rem;
         }

@@ -1,6 +1,6 @@
 <script>
-  import TodoItem from './components/TodoItem.svelte';
-  import Title from './components/Title.svelte';
+  import TodoItem from "./components/TodoItem.svelte";
+  import Title from "./components/Title.svelte";
 </script>
 
 <main>
@@ -10,24 +10,24 @@
 
 <style>
   main {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 1rem;
-      font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: Arial, sans-serif;
   }
 
   @media (max-width: 600px) {
-      main {
-          padding: 0.5rem;
-          max-width: 100%;
-      }
+    main {
+      padding: 0.5rem;
+      max-width: 100%;
+    }
   }
 
   @media (max-width: 400px) {
-      main {
-          padding: 0.5rem;
-          max-width: 100%;
-          box-shadow: none;
-      }
+    main {
+      padding: 0.5rem;
+      max-width: 100%;
+      box-shadow: none;
+    }
   }
 </style>
