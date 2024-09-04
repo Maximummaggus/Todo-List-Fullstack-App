@@ -4,12 +4,15 @@
     import ClearButton from "./ClearButton.svelte";
     import { onMount } from "svelte";
 
+
     // const todos = writable([]);
 
     let newTodo = "";
     let editMode = false;
     let editedTodoId = null;
     let editedText = "";
+
+
 
     async function addNewTodo() {
         console.log("Button clicked"); // Für Debugging
@@ -58,11 +61,6 @@
         editedText = "";
     }
 
-    function clearToDos() {
-        console.log("Todos cleared");
-        clearTodos();
-    }
-
     function toggleComplete(id) {
         todos.update((items) =>
             items.map((item) =>
@@ -70,15 +68,14 @@
             ),
         );
     }
-</script>
 
-<!-- <input
-    type="text"
-    bind:value={newTodo}
-    placeholder="Enter a new task..."
-    on:keydown={(e) => e.key === "Enter" && addNHewTodo()}
-/>
-<button on:click={addTodo}>Add Todo</button> -->
+    function handleRefresh() {
+        console.log("Todos cleared and list refreshed");
+    }
+
+    export let todo;
+
+</script>
 
 <div class="input-container">
     <input
@@ -90,53 +87,53 @@
     <button on:click={addNewTodo}>Add Todo</button>
 </div>
 
-<ClearButton on:refresh={clearToDos} />
+<ClearButton on:refresh={handleRefresh} />
 
 <div class="table-container">
     <table>
         <thead>
-            <tr>
-                <th>Complete</th>
-                <th>Task</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Complete</th>
+            <th>Task</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
-            {#each $todos as todo (todo.id)}
-                <tr class:completed={todo.completed}>
-                    {#if editMode && editedTodoId === todo.id}
-                        <td colspan="3">
-                            <input
+        {#each $todos as todo (todo.id)}
+            <tr class:completed={todo.completed}>
+                {#if editMode && editedTodoId === todo.id}
+                    <td colspan="3">
+                        <input
                                 bind:value={editedText}
                                 on:keydown={(e) =>
                                     e.key === "Enter" && saveEdit()}
-                            />
-                            <div class="buttons">
-                                <button on:click={saveEdit}>Save</button>
-                                <button on:click={cancelEdit}>Cancel</button>
-                            </div>
-                        </td>
-                    {:else}
-                        <td
-                            ><input
-                                type="checkbox"
-                                checked={todo.completed}
-                                on:change={() => toggleComplete(todo.id)}
-                            /></td
-                        >
-                        <td class="todo-content">{todo.text}</td>
-                        <td class="buttons">
-                            <button
+                        />
+                        <div class="buttons">
+                            <button on:click={saveEdit}>Save</button>
+                            <button on:click={cancelEdit}>Cancel</button>
+                        </div>
+                    </td>
+                {:else}
+                    <td
+                    ><input
+                            type="checkbox"
+                            checked={todo.completed}
+                            on:change={() => toggleComplete(todo.id)}
+                    /></td
+                    >
+                    <td class="todo-content">{todo.text}</td>
+                    <td class="buttons">
+                        <button
                                 on:click={() => startEdit(todo.id, todo.text)}
-                                >Edit</button
-                            >
-                            <button on:click={() => removeTodo(todo.id)}
-                                >Remove</button
-                            >
-                        </td>
-                    {/if}
-                </tr>
-            {/each}
+                        >Edit</button
+                        >
+                        <button on:click={() => removeTodo(todo.id)}
+                        >Remove</button
+                        >
+                    </td>
+                {/if}
+            </tr>
+        {/each}
         </tbody>
     </table>
 </div>

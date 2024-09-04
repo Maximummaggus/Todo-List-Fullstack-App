@@ -1,15 +1,22 @@
 <script>
+    import { clearTodos } from "../stores/todos.js";
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
 
+    function clearToDos() {
+        console.log("Todos cleared");
+        clearTodos();
+    }
+
     function handleClick() {
-        dispatch('refresh');
+        clearToDos();
+        dispatch('clear');
     }
 </script>
 
 <button on:click={handleClick}>
-    Clear Todo
+    Clear Todos
 </button>
 
 <style>
