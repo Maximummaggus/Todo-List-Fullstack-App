@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
 
 // Ein `writable` Store für die Liste der Todos
 export const todos = writable([]);
@@ -49,19 +49,20 @@ export const updateTodo = async (id, updatedTodo) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ text }),
+            body: JSON.stringify({ text: updatedTodo.text }), // Aktualisiert nur den Text
         });
 
         if (!response.ok) {
             throw new Error('Fehler beim Bearbeiten des Todos');
         }
 
-        const updatedTodo = await response.json();
-        todos.update(currentTodos => currentTodos.map(todo => todo.id === id ? updatedTodo : todo));
+        const updatedTodoFromApi = await response.json();
+        todos.update(currentTodos => currentTodos.map(todo => todo.id === id ? updatedTodoFromApi : todo));
     } catch (error) {
         console.error('Fehler:', error);
     }
 };
+
 
 // Funktion zum Löschen eines Todos
 export const deleteTodo = async (id) => {
@@ -100,16 +101,17 @@ export const clearTodos = async () => {
 
 export const toggleCompleteTodo = async (id) => {
     try {
-        const currentTodos = get(todos); // Importiere `get` von 'svelte/store'
+        const currentTodos = get(todos); // Holt die aktuelle Liste der Todos
         const todo = currentTodos.find(t => t.id === id);
         if (!todo) throw new Error('Todo nicht gefunden');
 
+        // Umschalten des Status (completed) des Todos
         const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ completed: !todo.completed }),
+            body: JSON.stringify({ completed: !todo.completed }), // Toggelt den Status
         });
 
         if (!response.ok) {
@@ -117,8 +119,12 @@ export const toggleCompleteTodo = async (id) => {
         }
 
         const updatedTodo = await response.json();
-        todos.update(currentTodos => currentTodos.map(t => t.id === id ? updatedTodo : t));
+
+        // Aktualisieren des Stores, um die Änderungen anzuzeigen
+        todos.update(currentTodos =>
+            currentTodos.map(t => t.id === id ? updatedTodo : t)
+        );
     } catch (error) {
-        console.error('Fehler:', error);
+        console.error('Fehler beim Umschalten des Todo-Status:', error);
     }
 };
