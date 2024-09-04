@@ -1,7 +1,7 @@
 <script>
     import { todos, addTodo, fetchTodos, clearTodos } from "../stores/todos.js";
     import { writable } from "svelte/store";
-    import RefreshButton from "./ClearButton.svelte";
+    import ClearButton from "./ClearButton.svelte";
     import { onMount } from "svelte";
 
     // const todos = writable([]);
@@ -90,7 +90,7 @@
     <button on:click={addNewTodo}>Add Todo</button>
 </div>
 
-<RefreshButton on:refresh={clearToDos} />
+<ClearButton on:refresh={clearToDos} />
 
 <div class="table-container">
     <table>
