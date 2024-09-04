@@ -9,7 +9,7 @@
 </script>
 
 <button on:click={handleClick}>
-    Refresh
+    Clear Todo
 </button>
 
 <style>
