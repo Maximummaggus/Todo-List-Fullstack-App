@@ -142,12 +142,19 @@
 </div>
 
 <style>
+    .input-container {
+        display: flex;
+        align-items: center;
+        gap: 8px; /* Abstand zwischen Input und Button */
+        margin-bottom: 16px;
+    }
+
     input[type="text"] {
         padding: 8px;
-        margin-right: 8px;
         border-radius: 4px;
         border: 1px solid #ccc;
-        width: calc(100% - 16px);
+        flex: 1; /* Füllt den verfügbaren Platz */
+        min-width: 0; /* Verhindert, dass das Input-Feld zu groß wird */
     }
 
     button {
@@ -210,6 +217,19 @@
     }
 
     @media (max-width: 600px) {
+        .input-container {
+            flex-direction: column; /* Stapelt Input und Button übereinander */
+            gap: 8px; /* Abstand zwischen den Elementen */
+        }
+
+        input[type="text"] {
+            width: 100%; /* Breite des Input-Feldes auf 100% setzen */
+        }
+
+        button {
+            width: 100%; /* Breite des Buttons auf 100% setzen */
+        }
+
         .table-container {
             overflow-x: auto;
         }
@@ -239,3 +259,4 @@
         }
     }
 </style>
+

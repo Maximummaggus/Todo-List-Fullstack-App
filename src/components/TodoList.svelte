@@ -42,7 +42,7 @@
         border-radius: 4px;
         border: 1px solid #ccc;
         flex-grow: 1;
-        min-width: 150px;
+        min-width: 70%;
     }
 
     button {
@@ -54,7 +54,7 @@
         cursor: pointer;
         margin-left: auto; /* Buttons nach rechts schieben */
         display: block;
-        width: 100%; /* Button nimmt volle Breite ein */
+        width: 30%; /* Button nimmt volle Breite ein */
     }
 
     ul {
