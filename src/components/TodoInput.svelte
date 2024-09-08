@@ -1,16 +1,12 @@
 <script>
-    import { addTodo } from "../stores/todos.js";
-    import { createEventDispatcher } from "svelte";
-
+    import {addTodo} from "../stores/todos.js";  // Der Store, um Todos hinzuzufügen
     let newTodo = "";
 
-    // Erstellen eines EventDispatchers
-    const dispatch = createEventDispatcher();
-
-    function addNewTodo() {
+    // Die asynchrone Funktion zum Hinzufügen eines neuen Todos
+    async function addNewTodo() {
         if (newTodo.trim()) {
-            dispatch("newtodo", { text: newTodo }); // Event nach oben senden
-            newTodo = ""; // Eingabefeld leeren
+            await addTodo(newTodo);  // Direktes Hinzufügen des Todos
+            newTodo = "";  // Eingabefeld leeren
         }
     }
 </script>
