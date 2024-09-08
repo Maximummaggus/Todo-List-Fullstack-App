@@ -9,6 +9,7 @@ export const fetchTodos = async () => {
         const response = await fetch('http://localhost:5000/api/todos');
         if (response.ok) {
             const data = await response.json();
+            console.log('Todos geladen:', data.todos);
             todos.set(data.todos);
         } else {
             console.error('Fehler beim Abrufen der Todos');
@@ -20,6 +21,7 @@ export const fetchTodos = async () => {
 
 // Funktion zum Hinzufügen eines neuen Todos
 export const addTodo = async (text) => {
+    console.log('Hinzufügen eines Todos:', text);
     try {
         const response = await fetch('http://localhost:5000/api/todos', {
             method: 'POST',
@@ -43,6 +45,7 @@ export const addTodo = async (text) => {
 
 // Funktion zum Aktualisieren eines Todos
 export const updateTodo = async (id, updatedTodo) => {
+    console.log('Aktualisieren eines Todos:', id, updatedTodo);
     try {
         const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
             method: 'PUT',
@@ -66,6 +69,7 @@ export const updateTodo = async (id, updatedTodo) => {
 
 // Funktion zum Löschen eines Todos
 export const deleteTodo = async (id) => {
+    console.log('Löschen eines Todos:', id);
     try {
         const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
             method: 'DELETE',
@@ -83,6 +87,7 @@ export const deleteTodo = async (id) => {
 
 // Funktion zum Löschen aller Todos
 export const clearTodos = async () => {
+    console.log('Löschen aller Todos');  // Loggen des Vorgangs
     try {
         const response = await fetch('http://localhost:5000/api/todos', {
             method: 'DELETE',
@@ -100,6 +105,7 @@ export const clearTodos = async () => {
 
 
 export const toggleCompleteTodo = async (id) => {
+    console.log('Umschalten des Todo-Status:', id);  // Loggen des Vorgangs
     try {
         const currentTodos = get(todos); // Holt die aktuelle Liste der Todos
         const todo = currentTodos.find(t => t.id === id);
