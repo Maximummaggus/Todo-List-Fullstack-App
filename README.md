@@ -1,47 +1,49 @@
-# Svelte + Vite
+# Project Title
 
-This template should help get you started developing with Svelte in Vite.
+Todo Web Application with server-side programming and RESTful services
 
-## Recommended IDE Setup
+## Description
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+This project implements a web application for managing a to-do list. The front end is built using SvelteKit, providing a fast, reactive user experience with server-side rendering capabilities. The backend is developed with Express.js and offers a RESTful API with CRUD operations. The front end is designed to be responsive with a mobile-first approach. The application stores tasks in a relational database (SQLite), and it is hosted locally using the Node.js runtime environment.
 
-## Need an official Svelte framework?
+## Interfaces
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+Web Interface (SvelteKit): A web-based UI for viewing, adding, updating, and removing to-dos.
+REST API (Express.js):
+- POST /todos: Create a new todo
+- GET /todos: Retrieve all todos
+- PUT /todos/:id: Update a specific todo
+- DELETE /todos/:id: Delete a specific todo
 
-## Technical considerations
+## Installation
+git clone https://github.com/Maximummaggus/Todo-List-Fullstack-App.git
+npm install
+npm install express sqlite3
+npm install cors
+npm install supertest
 
-**Why use this over SvelteKit?**
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+## Configuration
 
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+- Ensure that Node.js is installed (v14 or higher).
+- The application uses SQLite for data persistence; no further   configuration is needed unless you choose to modify the database connection.
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+## Usage
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+Start the server:
+node .\server.js
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+Start the frontend:
+npm run build
+npm run preview
 
-**Why include `.vscode/extensions.json`?**
+## Test
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+Unit tests for backend logic are provided using the Jest framework.
+Run tests:
+- npm test
 
-**Why enable `checkJs` in the JS template?**
-
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+## Authors
+Christian Napoli
+Simon Chhit
+Marcus Becker
