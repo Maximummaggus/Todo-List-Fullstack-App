@@ -103,7 +103,7 @@ export const clearTodos = async () => {
     }
 };
 
-
+// Funktion zum markieren eines Todos als abgeschlossen oder nicht abgeschlossen
 export const toggleCompleteTodo = async (id) => {
     console.log('Umschalten des Todo-Status:', id);  // Loggen des Vorgangs
     try {
